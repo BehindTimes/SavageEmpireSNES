@@ -492,7 +492,8 @@ namespace SavageEmpireSNESTransTool
                     int val = (curByte & 0x7F);
                     strRet += " " + val.ToString() + "(";
                     // Output the string here
-                    if(m_dialogOptions.Count > val)
+                    val--;
+                    if (m_dialogOptions.Count > val)
                     {
                         strRet += m_dialogOptions[val];
                     }
@@ -517,7 +518,7 @@ namespace SavageEmpireSNESTransTool
             uint curWord = 0;
             string strRet = "SET";
             curAddress++;
-            GetWord(ref curAddress);
+            curWord = GetWord(ref curAddress);
             strRet += " " + curWord.ToString("X4") + "(";
             // Output the string here
             if (m_knownFlags.ContainsKey(curWord))
