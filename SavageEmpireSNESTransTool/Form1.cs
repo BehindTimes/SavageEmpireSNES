@@ -119,37 +119,138 @@ namespace SavageEmpireSNESTransTool
                 }
             }
 
+        private uint FindPreviousAddress(byte[] data, uint start_address)
+        {
+            // Another case of this will never happen, unless a person
+            // runs this without knowing what they're doing
+            if(start_address > data.Length)
+            {
+                return 0;
+            }
+            while(start_address > 2)
+            {
+                // Just a quick sanity check which should never happen
+                if(start_address < 100)
+                {
+                    return 0;
+                }
+                start_address -= 2;
+                if(data[start_address] != 0x05)
+                {
+                    return start_address + 1;
+                }
+            }
+            return 0;
+        }
+
+        private uint FindPreviousCharacterAddress(byte[] data, uint start_address, int counter)
+        {
+            // Another case of this will never happen, unless a person
+            // runs this without knowing what they're doing
+            if (start_address > data.Length)
+            {
+                return 0;
+            }
+
+            while (counter > 0)
+            {
+                // Just a quick sanity check which should never happen
+                if (start_address < 100)
+                {
+                    return 0;
+                }
+                start_address -= 2;
+                if (data[start_address] == 0xFF && data[start_address + 1] == 0xFF)
+                {
+                    counter--;
+                }
+            }
+            return start_address + 2;
+        }
+
+        private void findInventoryItem()
+        {
+            uint start_address = 0x138ca;
+            bool bValid = true;
+
+            string strFile = tbFile.Text;
+            if (File.Exists(strFile))
+            {
+                byte[] fileData = File.ReadAllBytes(strFile);
+                uint nBytes = 0;
+                string numBytes = tbNumBytes.Text;
+
+                try
+                {
+                    uint.TryParse(numBytes, out nBytes);
+                }
+                catch (FormatException)
+                {
+                    nBytes = 0;
+                }
+
+                if (nBytes > 0)
+                {
+                    int num_attempts = (int)nBytes;
+                    for (int a = 0; a < num_attempts; ++a)
+                    {
+                        start_address = FindPreviousAddress(fileData, start_address);
+                        if (start_address == 0)
+                        {
+                            bValid = false;
+                            break;
+                        }
+                    }
+                    if (bValid)
+                    {
+                        // 0x13742 - 40 items before torch
+                        // 0x0010125e - 40 words before torch
+                        uint character_address = 0x101402;
+                        character_address = FindPreviousCharacterAddress(fileData, character_address, num_attempts + 1);
+                        if (character_address != 0)
+                        {
+                            int j = 0;
+                        }
+                    }
+                }
+            }
+        }
+
         private void btnCheckInventory_Click(object sender, EventArgs e)
         {
+            //findInventoryItem();
+            //return;
+            
             string numBytes = tbNumBytes.Text;
             string strFile = tbFile.Text;
             uint nBytes = 0;
             if (File.Exists(strFile))
-            { }
-            ConversationLoader cLoader = new ConversationLoader();
-            byte[] fileData = File.ReadAllBytes(strFile);
+            {
+                byte[] fileData = File.ReadAllBytes(strFile);
 
-            // 0x138ca - torch
-            // 0x101402 - たいまつ
-            try
-            {
-                uint.TryParse(numBytes, out nBytes);
-            }
-            catch (FormatException)
-            {
-                nBytes = 0;
-            }
-
-            if(nBytes > 0)
-            {
-                bool worked = testInventory(fileData, 0x138ca, 0x101402, nBytes);
-                if (worked)
+                // 0x138ca - torch
+                // 0x13be8 - ring - Ring must be at this address.
+                // 0x101402 - たいまつ
+                try
                 {
-                    int j = 0;
+                    uint.TryParse(numBytes, out nBytes);
                 }
-                else
+                catch (FormatException)
                 {
-                    int k = 0;
+                    nBytes = 0;
+                }
+
+                if (nBytes > 0)
+                {
+                    bool worked = testInventory(fileData, 0x13742, 0x0010125e, nBytes);
+                    if (worked)
+                    {
+                        int j = 0;
+                    }
+                    else
+                    {
+                        int k = 0;
+                    }
                 }
             }
         }
