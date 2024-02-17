@@ -38,6 +38,7 @@
             this.tbFile = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.cbConv = new System.Windows.Forms.ComboBox();
+            this.btnCheckInventory = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbOffset
@@ -54,7 +55,7 @@
             this.tbOutput.Multiline = true;
             this.tbOutput.Name = "tbOutput";
             this.tbOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbOutput.Size = new System.Drawing.Size(423, 286);
+            this.tbOutput.Size = new System.Drawing.Size(554, 286);
             this.tbOutput.TabIndex = 1;
             this.tbOutput.WordWrap = false;
             // 
@@ -137,11 +138,22 @@
             this.cbConv.TabIndex = 9;
             this.cbConv.SelectedIndexChanged += new System.EventHandler(this.cbConv_SelectedIndexChanged);
             // 
+            // btnCheckInventory
+            // 
+            this.btnCheckInventory.Location = new System.Drawing.Point(438, 3);
+            this.btnCheckInventory.Name = "btnCheckInventory";
+            this.btnCheckInventory.Size = new System.Drawing.Size(108, 23);
+            this.btnCheckInventory.TabIndex = 10;
+            this.btnCheckInventory.Text = "Test Inventory";
+            this.btnCheckInventory.UseVisualStyleBackColor = true;
+            this.btnCheckInventory.Click += new System.EventHandler(this.btnCheckInventory_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(447, 359);
+            this.ClientSize = new System.Drawing.Size(576, 369);
+            this.Controls.Add(this.btnCheckInventory);
             this.Controls.Add(this.cbConv);
             this.Controls.Add(this.tbOutput);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -171,6 +183,7 @@
         private System.Windows.Forms.TextBox tbFile;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ComboBox cbConv;
+        private System.Windows.Forms.Button btnCheckInventory;
     }
 }
 

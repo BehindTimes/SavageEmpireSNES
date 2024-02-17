@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace SavageEmpireSNESTransTool
 {
@@ -96,20 +97,16 @@ namespace SavageEmpireSNESTransTool
             }
         }
 
-        // 15 - Intanya
-        // 30 - Triolo
-        // 71 - Generic Kurak NPC
-        // 73 - Generic Kurak NPC
-        // 75 - Generic Kurak NPC
-        // 77 - Generic Kurak NPC
-        // 122 - Generic Kurak NPC
+        // 04 - Aloron
+        // 16 - Intanya
+        // 31 - Triolo
+        // 32 - Tristia
+        // 71-80 - Generic Kurak NPC
         private void cbConv_SelectedIndexChanged(object sender, EventArgs e)
         {
             string strFile = tbFile.Text;
             if (File.Exists(strFile))
-            {
-                oldTranslate(strFile);
-
+            { }
                 ConversationLoader cLoader = new ConversationLoader();
                 byte[] fileData = File.ReadAllBytes(strFile);
                 cLoader.LoadData(fileData);
@@ -121,6 +118,163 @@ namespace SavageEmpireSNESTransTool
                     tbOutput.Text = cLoader.m_CurrentConversation;
                 }
             }
+
+        private void btnCheckInventory_Click(object sender, EventArgs e)
+        {
+            string numBytes = tbNumBytes.Text;
+            string strFile = tbFile.Text;
+            uint nBytes = 0;
+            if (File.Exists(strFile))
+            { }
+            ConversationLoader cLoader = new ConversationLoader();
+            byte[] fileData = File.ReadAllBytes(strFile);
+
+            // 0x138ca - torch
+            // 0x101402 - たいまつ
+            try
+            {
+                uint.TryParse(numBytes, out nBytes);
+            }
+            catch (FormatException)
+            {
+                nBytes = 0;
+            }
+
+            if(nBytes > 0)
+            {
+                bool worked = testInventory(fileData, 0x138ca, 0x101402, nBytes);
+                if (worked)
+                {
+                    int j = 0;
+                }
+                else
+                {
+                    int k = 0;
+                }
+            }
+        }
+
+        // This is only for the real untranslated ROM.  It will not work with a translated/partially translated ROM
+        private bool testInventory(byte[] fileData, uint inventoryAddress, uint characterAddress, uint numItems)
+        {
+            var japaneseEncoding = Encoding.GetEncoding("shift_jis");
+            byte[] outbyte = new byte[2];
+            string strDisplay = "";
+
+            List<string> listAlphabet = new List<string>();
+            List<byte[]> listBlockData = new List<byte[]>();
+            List<int> listUniqueBlockData = new List<int>();
+            for (uint index = 0; index < numItems; ++index)
+            {
+                string strOut = "";
+                uint curNum = 0;
+                byte b0;
+                byte b1;
+                // This should never happen.  This will only happen if you're messing around
+                // with this program, having no clue what's going on, but better to be safe
+                // than sorry.
+                if (characterAddress + 4 > fileData.Length)
+                {
+                    return false;
+                }
+                b0 = fileData[characterAddress];
+                b1 = fileData[characterAddress + 1];
+                curNum = (uint)b0 + (((uint)b1) << 8);
+                characterAddress += 2;
+
+                while (curNum != 0xFFFF)
+                {   
+                    if (characterAddress + 4 > fileData.Length)
+                    {
+                        return false;
+                    }
+
+                    if (curNum % 3 == 0)
+                    {
+                        curNum /= 3;
+                        curNum += 0x8140;
+
+                        outbyte[1] = (byte)(curNum & 0xFF);
+                        outbyte[0] = (byte)((curNum >> 8) & 0xFF);
+                        string test = japaneseEncoding.GetString(outbyte);
+                        strOut += test;
+                    }
+                    else
+                    {
+                        return false; // Anything not divisible by 3 will produce garbage.  Not sure why it was written this way
+                    }
+
+                    b0 = fileData[characterAddress];
+                    b1 = fileData[characterAddress + 1];
+                    curNum = (uint)b0 + (((uint)b1) << 8);
+                    characterAddress += 2;
+                }
+                if(strOut.Length <= 0)
+                {
+                    return false;
+                }
+                listAlphabet.Add(strOut);
+            }
+
+            for (uint index = 0; index < numItems; ++index)
+            {
+                byte option_length = fileData[inventoryAddress];
+
+                inventoryAddress++;
+                listBlockData.Add(new byte[option_length]);
+
+                if(option_length % 2 != 0)
+                {
+                    return false;
+                }
+
+                Buffer.BlockCopy(fileData, (int)inventoryAddress, listBlockData.Last(), 0, option_length);
+                inventoryAddress += option_length;
+                List<byte> listUniqueBytes = new List<byte>(); 
+                for (int tempindex = 0; tempindex < listBlockData.Last().Length; tempindex += 2)
+                {
+                    if (listBlockData.Last()[tempindex] != 0x05)
+                    {
+                        return false;
+                    }
+                    listUniqueBytes.Add(listBlockData.Last()[tempindex + 1]);
+                }
+                listUniqueBlockData.Add(listUniqueBytes.Distinct().ToList().Count);
+            }
+
+            // Sanity check here
+            for (int index = 0; index < (int)numItems; ++index)
+            {
+                if ((listAlphabet[index].Length) != listUniqueBlockData[index])
+                {
+                    return false;
+                }
+            }
+            // Now that we passed the sanity checks, construct the words
+            for (int index = 0; index < (int)numItems; ++index)
+            {
+                string strOut = "";
+                uint startVal = listBlockData[index][1];
+
+                for (int tempindex = 1; tempindex < listBlockData[index].Length; tempindex += 2)
+                {
+                    uint tempval = listBlockData[index][tempindex];
+                    if(tempval < startVal) // This should not happen
+                    {
+                        return false;
+                    }
+                    uint curCharacter = tempval - startVal;
+                    if(curCharacter >= listAlphabet[index].Length) // Not within the range of the alphabet
+                    {
+                        return false;
+                    }
+                    strOut += listAlphabet[index][(int)curCharacter];
+                }
+                strDisplay += strOut;
+                strDisplay += Environment.NewLine;
+            }
+            tbOutput.Text = strDisplay;
+            return true;
         }
     }
 }

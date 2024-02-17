@@ -45,14 +45,15 @@ namespace SavageEmpireSNESTransTool
             m_knownFlags = new Dictionary<uint, string>();
 
             m_knownFlags.Add(0x10A9, "INTANYA_INTRO_DONE");
-
+            // Appears as if bits are & 0x7F
             m_knownBits = new Dictionary<uint, string>();
             m_knownBits.Add(0x07, "KURAK_SOMETHING");
             m_knownBits.Add(0x0B, "YOLARU_SOMETHING");
             m_knownBits.Add(0x11, "BARRAB_SOMETHING");
             m_knownBits.Add(0x15, "DISKIKI_SOMETHING");
+            m_knownBits.Add(0x5B, "KNOWS_TRIOLO");
             m_knownBits.Add(0x81, "ASKED_DOKREI_ABOUT_UNION");
-            m_knownBits.Add(0x85, "KNOWS_ARORON");
+            m_knownBits.Add(0x85, "KNOWS_ALORON");
             m_knownBits.Add(0x86, "KNOWS_KURAK_NEED");
             m_knownBits.Add(0x87, "AIERA_SAVED_KURAK_JOINED_UNION");
             m_knownBits.Add(0x88, "KNOWS_APATON");
@@ -73,6 +74,8 @@ namespace SavageEmpireSNESTransTool
             m_knownBits.Add(0xB1, "KNOWS_ABOUT_TOPURU");
             m_knownBits.Add(0xC5, "KNOWS_MOSAGAN");
             m_knownBits.Add(0xCA, "KNOWS_Pakusakutamaku");
+            m_knownBits.Add(0xDB, "KNOWS_TRIOLO");
+            m_knownBits.Add(0xDC, "KNOWS_TRISTIA");
         }
 
         void LoadOptions()
@@ -85,7 +88,7 @@ namespace SavageEmpireSNESTransTool
             {  
                 PC_Address++;
                 m_optionSet.Add(new byte[option_length]);
-                if(m_optionSet.Count == 310)
+                if(m_optionSet.Count == 0x4c)
                 {
                     int j = 9;
                 }
@@ -575,7 +578,7 @@ namespace SavageEmpireSNESTransTool
 
         private string Process0xCA(ref uint curAddress)
         {
-            string strRet = "IF NOT PROMPT THEN";
+            string strRet = "IF NOT PROMPT THEN ";
             m_waitForInputAddress = curAddress;
             curAddress++;
             strRet += GetLocalAddress(ref curAddress);
