@@ -87,7 +87,7 @@ namespace SavageEmpireSNESTransTool
             {
                 nBytes = 0;
             }
-            if (nOffset > 0 && nBytes > 0)
+            if (nOffset > 0 && nBytes > 0 && nBytes < fileData.Length)
             {
                 processFile(fileData, nOffset, nBytes);
             }
@@ -236,6 +236,10 @@ namespace SavageEmpireSNESTransTool
                 uint nOffset = 0;
                 uint nStringOffset = 0;
 
+                // Need to correct 0x12e00-0x12f00, 13070-0c13090, 130c0, 13110, 13130-13160, 13250-13270
+
+                // 0x1007d8 - Can't drop here
+                // 0x1008b4 - Use outdoors at night
                 // 0x13419 - Vendor: It sells for !
                 // 0x100ee2 - Vendor alphabet
                 // 0x1342a - Vendor: It sells for !
