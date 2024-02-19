@@ -23,6 +23,7 @@ namespace SavageEmpireSNESTransTool
         const uint DIALOG_OPTIONS = 0x147AE;
         //const uint DIALOG_OPTIONS = 0x147C6;
         uint m_waitForInputAddress = 0;
+        const uint NAME_IN_OPTION_OFFSET = 0x1c4;
 
         public string m_CurrentConversation;
 
@@ -85,7 +86,11 @@ namespace SavageEmpireSNESTransTool
             byte option_length = m_data[PC_Address];
 
             while (option_length != 0x82)
-            {  
+            {
+                if (PC_Address == 0x15b51) // エノコー Option 645/0x285
+                {
+                    int j = 9;
+                }
                 PC_Address++;
                 m_optionSet.Add(new byte[option_length]);
                 if(m_optionSet.Count == 0x4c)
@@ -255,6 +260,19 @@ namespace SavageEmpireSNESTransTool
             return strRet;
         }
 
+        // Load option from memory (Used with Generic NPCs saving names)
+        private string Process0x13(ref uint curAddress)
+        {
+            uint address = 0;
+            string strRet;
+            curAddress++;
+            address = GetWord(ref curAddress);
+
+            strRet = String.Format("LOAD_OPTION_FROM_MEMORY ADDRESS({0:X4})", address);
+
+            return strRet;
+        }
+
         // Blank RAM
         private string Process0x88(ref uint curAddress)
         {
@@ -366,24 +384,20 @@ namespace SavageEmpireSNESTransTool
             return strRet;
         }
 
-        // ??? Something to do with profile loading
+        // Saves a value for callback
+        // First 2 bytes Memory Address
+        // Second 2 bytes Option Value
         private string Process0xA1(ref uint curAddress)
         {
-            byte curByte = 0;
-            string strRet = "LOAD_PROFILE ";
+            uint address = 0;
+            uint option = 0;
+            string strRet;
             curAddress++;
-            curByte = m_data[curAddress];
-            curAddress++;
-            strRet += curByte.ToString("X2");
-            curByte = m_data[curAddress];
-            curAddress++;
-            strRet += curByte.ToString("X2");
-            curByte = m_data[curAddress];
-            curAddress++;
-            strRet += curByte.ToString("X2");
-            curByte = m_data[curAddress];
-            curAddress++;
-            strRet += curByte.ToString("X2");
+            address = GetWord(ref curAddress);
+            option = GetWord(ref curAddress);
+            string strOption = GetDialogOption(option);
+
+            strRet = String.Format("STORE_OPTION_IN_MEMORY ADDRESS({0:X4}) VALUE({1})", address, strOption);
 
             return strRet;
         }
@@ -660,6 +674,9 @@ namespace SavageEmpireSNESTransTool
                         break;
                     case 0x07:
                         m_CurrentConversation += Process0x07(ref curAddress);
+                        break;
+                    case 0x013:
+                        m_CurrentConversation += Process0x13(ref curAddress);
                         break;
                     case 0x88:
                         m_CurrentConversation += Process0x88(ref curAddress);
