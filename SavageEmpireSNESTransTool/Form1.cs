@@ -32,6 +32,11 @@ namespace SavageEmpireSNESTransTool
             byte[] outbyte = new byte[2];
             var japaneseEncoding = Encoding.GetEncoding("shift_jis");
 
+            if(nOffset >= fileData.Length)
+            {
+                return;
+            }
+
             tbOutput.Clear();
 
             for(uint index = 0; index < nBytes; index++)
