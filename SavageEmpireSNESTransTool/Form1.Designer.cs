@@ -39,6 +39,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.cbConv = new System.Windows.Forms.ComboBox();
             this.btnCheckInventory = new System.Windows.Forms.Button();
+            this.tbAlphaOffset = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // tbOffset
@@ -47,7 +48,7 @@
             this.tbOffset.Name = "tbOffset";
             this.tbOffset.Size = new System.Drawing.Size(100, 20);
             this.tbOffset.TabIndex = 0;
-            this.tbOffset.Text = "1095fe";
+            this.tbOffset.Text = "100f26";
             // 
             // tbOutput
             // 
@@ -61,7 +62,7 @@
             // 
             // btnTranslate
             // 
-            this.btnTranslate.Location = new System.Drawing.Point(357, 3);
+            this.btnTranslate.Location = new System.Drawing.Point(464, 3);
             this.btnTranslate.Name = "btnTranslate";
             this.btnTranslate.Size = new System.Drawing.Size(75, 23);
             this.btnTranslate.TabIndex = 2;
@@ -71,7 +72,7 @@
             // 
             // tbNumBytes
             // 
-            this.tbNumBytes.Location = new System.Drawing.Point(251, 6);
+            this.tbNumBytes.Location = new System.Drawing.Point(358, 6);
             this.tbNumBytes.Name = "tbNumBytes";
             this.tbNumBytes.Size = new System.Drawing.Size(100, 20);
             this.tbNumBytes.TabIndex = 3;
@@ -89,7 +90,7 @@
             // lblNumBytes
             // 
             this.lblNumBytes.AutoSize = true;
-            this.lblNumBytes.Location = new System.Drawing.Point(160, 9);
+            this.lblNumBytes.Location = new System.Drawing.Point(266, 9);
             this.lblNumBytes.Name = "lblNumBytes";
             this.lblNumBytes.Size = new System.Drawing.Size(85, 13);
             this.lblNumBytes.TabIndex = 5;
@@ -140,7 +141,7 @@
             // 
             // btnCheckInventory
             // 
-            this.btnCheckInventory.Location = new System.Drawing.Point(438, 3);
+            this.btnCheckInventory.Location = new System.Drawing.Point(441, 32);
             this.btnCheckInventory.Name = "btnCheckInventory";
             this.btnCheckInventory.Size = new System.Drawing.Size(108, 23);
             this.btnCheckInventory.TabIndex = 10;
@@ -148,11 +149,20 @@
             this.btnCheckInventory.UseVisualStyleBackColor = true;
             this.btnCheckInventory.Click += new System.EventHandler(this.btnCheckInventory_Click);
             // 
+            // tbAlphaOffset
+            // 
+            this.tbAlphaOffset.Location = new System.Drawing.Point(160, 6);
+            this.tbAlphaOffset.Name = "tbAlphaOffset";
+            this.tbAlphaOffset.Size = new System.Drawing.Size(100, 20);
+            this.tbAlphaOffset.TabIndex = 11;
+            this.tbAlphaOffset.Text = "1343b";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(576, 369);
+            this.Controls.Add(this.tbAlphaOffset);
             this.Controls.Add(this.btnCheckInventory);
             this.Controls.Add(this.cbConv);
             this.Controls.Add(this.tbOutput);
@@ -184,6 +194,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.ComboBox cbConv;
         private System.Windows.Forms.Button btnCheckInventory;
+        private System.Windows.Forms.TextBox tbAlphaOffset;
     }
 }
 

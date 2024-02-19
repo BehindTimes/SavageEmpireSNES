@@ -68,6 +68,11 @@ namespace SavageEmpireSNESTransTool
                 CultureInfo provider;
                 provider = CultureInfo.InvariantCulture;
 
+                if (offset.StartsWith("0x"))
+                {
+                    offset = offset.Remove(0, 2);
+                }
+
                 uint.TryParse(offset, System.Globalization.NumberStyles.HexNumber, provider, out nOffset);
             }
             catch (FormatException)
@@ -170,7 +175,8 @@ namespace SavageEmpireSNESTransTool
 
         private void findInventoryItem()
         {
-            uint start_address = 0x138ca;
+            uint start_address = 0x00013515;
+            uint character_address = 0x0010100c;
             bool bValid = true;
 
             string strFile = tbFile.Text;
@@ -203,9 +209,9 @@ namespace SavageEmpireSNESTransTool
                     }
                     if (bValid)
                     {
-                        // 0x13742 - 40 items before torch
-                        // 0x0010125e - 40 words before torch
-                        uint character_address = 0x101402;
+                        // 0x000134c7 - 20 items before poison arrow
+                        // 0x00100fb4 - 20 words before poison arrow
+
                         character_address = FindPreviousCharacterAddress(fileData, character_address, num_attempts + 1);
                         if (character_address != 0)
                         {
@@ -227,30 +233,53 @@ namespace SavageEmpireSNESTransTool
             if (File.Exists(strFile))
             {
                 byte[] fileData = File.ReadAllBytes(strFile);
+                uint nOffset = 0;
+                uint nStringOffset = 0;
 
+                // 0x13419 - Vendor: It sells for !
+                // 0x100ee2 - Vendor alphabet
+                // 0x1342a - Vendor: It sells for !
+                // 0x100f04 - Vendor alphabet
+                // 0x00013515 - box
+                // 0x000135a4 - poison arrow
+                // 0x001010a0
+                // 0x13742 - grapes
+                // 0x0010125e
+                // 0x136f8 - Grenade must be at this address.
                 // 0x138ca - torch
                 // 0x13be8 - ring - Ring must be at this address.
                 // 0x101402 - たいまつ
                 try
                 {
+                    string offset = tbOffset.Text;
+                    string alphaoffset = tbAlphaOffset.Text;
+
                     uint.TryParse(numBytes, out nBytes);
+                    
+
+                    CultureInfo provider;
+                    provider = CultureInfo.InvariantCulture;
+
+                    if(offset.StartsWith("0x"))
+                    {
+                        offset = offset.Remove(0, 2);
+                    }
+                    if (alphaoffset.StartsWith("0x"))
+                    {
+                        alphaoffset = alphaoffset.Remove(0, 2);
+                    }
+
+                    uint.TryParse(offset, System.Globalization.NumberStyles.HexNumber, provider, out nOffset);
+                    uint.TryParse(alphaoffset, System.Globalization.NumberStyles.HexNumber, provider, out nStringOffset);
                 }
                 catch (FormatException)
                 {
                     nBytes = 0;
                 }
 
-                if (nBytes > 0)
+                if (nBytes > 0 && nOffset > 0 && nStringOffset > 0)
                 {
-                    bool worked = testInventory(fileData, 0x13742, 0x0010125e, nBytes);
-                    if (worked)
-                    {
-                        int j = 0;
-                    }
-                    else
-                    {
-                        int k = 0;
-                    }
+                    bool worked = testInventory(fileData, nStringOffset, nOffset, nBytes);
                 }
             }
         }
@@ -372,6 +401,7 @@ namespace SavageEmpireSNESTransTool
                     strOut += listAlphabet[index][(int)curCharacter];
                 }
                 strDisplay += strOut;
+                strDisplay += Environment.NewLine;
                 strDisplay += Environment.NewLine;
             }
             tbOutput.Text = strDisplay;
