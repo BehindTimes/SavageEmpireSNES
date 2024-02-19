@@ -248,7 +248,6 @@ namespace SavageEmpireSNESTransTool
         {
             byte byte1;
             string strRet = "LOAD_PORTRAIT ";
-            m_waitForInputAddress = curAddress;
             curAddress++;
             byte1 = m_data[curAddress];
             curAddress++;
@@ -579,7 +578,6 @@ namespace SavageEmpireSNESTransTool
         private string Process0xCA(ref uint curAddress)
         {
             string strRet = "IF NOT PROMPT THEN ";
-            m_waitForInputAddress = curAddress;
             curAddress++;
             strRet += GetLocalAddress(ref curAddress);
             return strRet;

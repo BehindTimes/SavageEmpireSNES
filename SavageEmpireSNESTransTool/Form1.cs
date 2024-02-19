@@ -111,7 +111,7 @@ namespace SavageEmpireSNESTransTool
         // 16 - Intanya
         // 31 - Triolo
         // 32 - Tristia
-        // 71-80 - Generic Kurak NPC
+        // 71-77 - Generic Kurak NPC
         private void cbConv_SelectedIndexChanged(object sender, EventArgs e)
         {
             string strFile = tbFile.Text;
