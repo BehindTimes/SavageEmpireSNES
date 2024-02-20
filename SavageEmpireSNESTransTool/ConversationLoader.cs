@@ -268,7 +268,7 @@ namespace SavageEmpireSNESTransTool
             curAddress++;
             address = GetWord(ref curAddress);
 
-            strRet = String.Format("LOAD_OPTION_FROM_MEMORY ADDRESS({0:X4})", address);
+            strRet = String.Format("LOAD_OPTION_FROM_MEMORY ADDRESS {0:X4}", address);
 
             return strRet;
         }
@@ -397,7 +397,7 @@ namespace SavageEmpireSNESTransTool
             option = GetWord(ref curAddress);
             string strOption = GetDialogOption(option);
 
-            strRet = String.Format("STORE_OPTION_IN_MEMORY ADDRESS({0:X4}) VALUE({1})", address, strOption);
+            strRet = String.Format("STORE_OPTION_IN_MEMORY ADDRESS: {0:X4} VALUE: {1:X4}({2})", address, option, strOption);
 
             return strRet;
         }
