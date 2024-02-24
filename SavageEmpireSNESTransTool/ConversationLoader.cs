@@ -46,7 +46,7 @@ namespace SavageEmpireSNESTransTool
             m_knownFlags = new Dictionary<uint, string>();
 
             m_knownFlags.Add(0x10A9, "INTANYA_INTRO_DONE");
-            // Appears as if bits are & 0x7F
+
             m_knownBits = new Dictionary<uint, string>();
             m_knownBits.Add(0x07, "KURAK_SOMETHING");
             m_knownBits.Add(0x0B, "YOLARU_SOMETHING");
@@ -68,11 +68,14 @@ namespace SavageEmpireSNESTransTool
             m_knownBits.Add(0x9E, "KNOWS_FRITZ");
             m_knownBits.Add(0x9F, "FRITZ_TALKED_ABOUT_BRAIN");
             m_knownBits.Add(0xA0, "FRITZ_ALREADY_TOLD_LONG_STORY");
+            m_knownBits.Add(0xA7, "HALISA_SAVED");
             m_knownBits.Add(0xAA, "KNOWS_INARA");
             m_knownBits.Add(0xAB, "INARA_UNUSED?");
             m_knownBits.Add(0xAC, "INARA_EXPLAINED_ALREADY_WHY_PINDIRO_JOINS_UNION");
             m_knownBits.Add(0xAD, "INTANYA_CONVERSATION_RESET");
             m_knownBits.Add(0xB1, "KNOWS_ABOUT_TOPURU");
+            m_knownBits.Add(0xBB, "KNOWS_KUNAWO");
+            m_knownBits.Add(0xBC, "ASKED_KUNAWO_ABOUT_PINDIRO");
             m_knownBits.Add(0xC5, "KNOWS_MOSAGAN");
             m_knownBits.Add(0xCA, "KNOWS_Pakusakutamaku");
             m_knownBits.Add(0xDB, "KNOWS_TRIOLO");
@@ -363,7 +366,7 @@ namespace SavageEmpireSNESTransTool
         {
             byte byte1;
             byte byte2;
-            string strRet = "IF NOT ";
+            string strRet = "IF_NOT ";
             curAddress++;
 
             byte1 = m_data[curAddress];
@@ -419,7 +422,7 @@ namespace SavageEmpireSNESTransTool
         private string Process0xB6(ref uint curAddress)
         {
             uint curWord = 0;
-            string strRet = "IF NOT SELECTED DIALOG ";
+            string strRet = "IF_NOT_SELECTED_DIALOG ";
             curAddress++;
             curWord = GetWord(ref curAddress);
             curWord &= 0x7FFF;
@@ -589,9 +592,26 @@ namespace SavageEmpireSNESTransTool
             return strRet;
         }
 
+        // Not entirely sure exactly how this works, only that this is the correct break down of the instruction
         private string Process0xCA(ref uint curAddress)
         {
-            string strRet = "IF NOT PROMPT THEN ";
+            string strRet = "YES_NO_PROMPT ";
+            curAddress++;
+            //strRet += GetLocalAddress(ref curAddress);
+            return strRet;
+        }
+
+        private string Process0xCB(ref uint curAddress)
+        {
+            string strRet = "YES_NO_PROMPT_IF_NO_CONTINUE_TO ";
+            curAddress++;
+            strRet += GetLocalAddress(ref curAddress);
+            return strRet;
+        }
+
+        private string Process0xCC(ref uint curAddress)
+        {
+            string strRet = "YES_NO_PROMPT_END_NO_JUMP ";
             curAddress++;
             strRet += GetLocalAddress(ref curAddress);
             return strRet;
@@ -678,13 +698,13 @@ namespace SavageEmpireSNESTransTool
                     case 0x013:
                         m_CurrentConversation += Process0x13(ref curAddress);
                         break;
-                    case 0x88:
+                    case 0x88: // Blank/Return??
                         m_CurrentConversation += Process0x88(ref curAddress);
                         break;
-                    case 0x89:
+                    case 0x89: // Return??
                         m_CurrentConversation += Process0x89(ref curAddress);
                         break;
-                    case 0x8C:
+                    case 0x8C: // GOTO
                         m_CurrentConversation += Process0x8C(ref curAddress);
                         break;
                     case 0x8D:
@@ -693,13 +713,13 @@ namespace SavageEmpireSNESTransTool
                     case 0x94:
                         m_CurrentConversation += Process0x94(ref curAddress);
                         break;
-                    case 0x96:
+                    case 0x96: // JUMP_END
                         m_CurrentConversation += Process0x96(ref curAddress);
                         break;
                     case 0x9A:
                         m_CurrentConversation += Process0x9A(ref curAddress);
                         break;
-                    case 0x9B:
+                    case 0x9B: // IF_NOT
                         m_CurrentConversation += Process0x9B(ref curAddress);
                         break;
                     case 0xA1:
@@ -708,16 +728,16 @@ namespace SavageEmpireSNESTransTool
                     case 0xAB:
                         m_CurrentConversation += Process0xAB(ref curAddress);
                         break;
-                    case 0xB6:
+                    case 0xB6: // IF_NOT_SELECTED_DIALOG
                         m_CurrentConversation += Process0xB6(ref curAddress);
                         break;
-                    case 0xB8:
+                    case 0xB8: // LOAD_DIALOG_OPTIONS - Also ends current dialog
                         m_CurrentConversation += Process0xB8(ref curAddress);
                         break;
                     case 0xB9:
                         m_CurrentConversation += Process0xB9(ref curAddress);
                         break;
-                    case 0xBE:
+                    case 0xBE: // SET_DIALOG_OPTIONS
                         m_CurrentConversation += Process0xBE(ref curAddress);
                         break;
                     case 0xC0:
@@ -729,11 +749,17 @@ namespace SavageEmpireSNESTransTool
                     case 0xC4:
                         m_CurrentConversation += Process0xC4(ref curAddress);
                         break;
-                    case 0xC9:
+                    case 0xC9: // WAIT_FOR_INPUT
                         m_CurrentConversation += Process0xC9(ref curAddress);
                         break;
-                    case 0xCA:
+                    case 0xCA: // IF_NOT_PROMPT_THEN
                         m_CurrentConversation += Process0xCA(ref curAddress);
+                        break;
+                    case 0xCB: // IF_NOT_PROMPT_THEN GOTO
+                        m_CurrentConversation += Process0xCB(ref curAddress);
+                        break;
+                    case 0xCC: // IF_NOT_PROMPT_THEN GOTO
+                        m_CurrentConversation += Process0xCC(ref curAddress);
                         break;
                     case 0xFF:
                         done = true;

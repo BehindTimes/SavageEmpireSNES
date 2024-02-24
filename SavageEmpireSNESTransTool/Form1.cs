@@ -108,10 +108,25 @@ namespace SavageEmpireSNESTransTool
         }
 
         // 04 - Aloron
+        // 08 - Dokray
+        // 12 - Halawa
+        // 15 - Inara
         // 16 - Intanya
+        // 18 - Kunawo
+        // 21 - Mosagann
+        // 25 - Rafkin
+        // 26 - Sahree
         // 31 - Triolo
         // 32 - Tristia
-        // 71-77 - Generic Kurak NPC
+        // 37 - 60 - Generic NPCs
+        // 62-69 - Generic NPCs
+        // 70-77 - Generic Kurak NPC 
+        // 78-93 - Generic NPCs
+        // 96-103 - Generic NPCs
+        // 118 - Generic Barako NPC
+        // 122 - Generic Kurak NPC
+        // 124 - Generic Pindiro NPC
+        // 125 - Generic Yolaru NPC
         private void cbConv_SelectedIndexChanged(object sender, EventArgs e)
         {
             string strFile = tbFile.Text;
@@ -256,8 +271,10 @@ namespace SavageEmpireSNESTransTool
                 // 0x0010125e
                 // 0x136f8 - Grenade must be at this address.
                 // 0x138ca - torch
-                // 0x13be8 - ring - Ring must be at this address.
                 // 0x101402 - たいまつ
+                // 0x13be8 - ring - Ring must be at this address.
+                // 0x101936 - Choose your path
+                // 0x14bcd - Jimmy must be at this address
                 try
                 {
                     string offset = tbOffset.Text;
