@@ -108,6 +108,7 @@ namespace SavageEmpireSNESTransTool
         }
 
         // 04 - Aloron
+        // 05 - Apaton
         // 08 - Dokray
         // 12 - Halawa
         // 15 - Inara

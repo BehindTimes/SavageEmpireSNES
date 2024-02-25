@@ -76,6 +76,7 @@ namespace SavageEmpireSNESTransTool
             m_knownBits.Add(0xB1, "KNOWS_ABOUT_TOPURU");
             m_knownBits.Add(0xBB, "KNOWS_KUNAWO");
             m_knownBits.Add(0xBC, "ASKED_KUNAWO_ABOUT_PINDIRO");
+            m_knownBits.Add(0xCC, "KNOWS_RAFKIN");
             m_knownBits.Add(0xC5, "KNOWS_MOSAGAN");
             m_knownBits.Add(0xCA, "KNOWS_Pakusakutamaku");
             m_knownBits.Add(0xDB, "KNOWS_TRIOLO");
@@ -387,6 +388,18 @@ namespace SavageEmpireSNESTransTool
             return strRet;
         }
 
+        private string Process0xA0(ref uint curAddress)
+        {
+            string strRet = "A0??? ";
+            uint value;
+            curAddress++;
+            value = GetWord(ref curAddress);
+
+            strRet += value.ToString("X4");
+
+            return strRet;
+        }
+
         // Saves a value for callback
         // First 2 bytes Memory Address
         // Second 2 bytes Option Value
@@ -657,9 +670,11 @@ namespace SavageEmpireSNESTransTool
             bool textmode = false;
             uint curAddress = m_conv_addresses_pc[id];
             uint conversation_length = 4000;
+            bool hasEndAddress = false;
             if(id + 1 < m_conv_addresses_pc.Length)
             {
                 conversation_length = m_conv_addresses_pc[id + 1] - curAddress;
+                hasEndAddress = true;
             }
             uint endAddress = curAddress + conversation_length;
             m_CurrentConversation = "-- DIALOG " + (id + 1) + Environment.NewLine;
@@ -722,6 +737,9 @@ namespace SavageEmpireSNESTransTool
                     case 0x9B: // IF_NOT
                         m_CurrentConversation += Process0x9B(ref curAddress);
                         break;
+                    case 0xA0:
+                        m_CurrentConversation += Process0xA0(ref curAddress);
+                        break;
                     case 0xA1:
                         m_CurrentConversation += Process0xA1(ref curAddress);
                         break;
@@ -762,7 +780,18 @@ namespace SavageEmpireSNESTransTool
                         m_CurrentConversation += Process0xCC(ref curAddress);
                         break;
                     case 0xFF:
-                        done = true;
+                        if (!hasEndAddress)
+                        {
+                            done = true;
+                        }
+                        else
+                        {
+                            // Probably part of another code that's not figured out
+                            //m_CurrentConversation += curAddress.ToString("X") + ":\t";
+                            //m_CurrentConversation += "*" + codeByte.ToString("X2") + "*";
+                            curAddress++;
+                            //m_CurrentConversation += Environment.NewLine;
+                        }
                         break;
                     default:
                         m_CurrentConversation += "*" + codeByte.ToString("X2") + "*";
