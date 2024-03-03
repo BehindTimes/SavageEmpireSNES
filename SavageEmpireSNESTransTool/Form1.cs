@@ -109,23 +109,44 @@ namespace SavageEmpireSNESTransTool
 
         // 04 - Aloron
         // 05 - Apaton
+        // 06 - Balakai
         // 08 - Dokray
+        // 10 - Grugorr
+        // 11 - Guoblum
         // 12 - Halawa
         // 15 - Inara
         // 16 - Intanya
+        // 17 - Jumu
         // 18 - Kunawo
+        // 19 - Lerei
+        // 20 - Moctapotl
         // 21 - Mosagann
+        // 22 - Nawl
+        // 24 - Paxaptamac
         // 25 - Rafkin
         // 26 - Sahree
+        // 28 - Sysskarr
         // 31 - Triolo
         // 32 - Tristia
+        // 33 - Tuomaxx
         // 37 - 60 - Generic NPCs
+        // 61 - Generic Haakur
         // 62-69 - Generic NPCs
         // 70-77 - Generic Kurak NPC 
         // 78-93 - Generic NPCs
+        // 94 - Generic Sakkhra
         // 96-103 - Generic NPCs
+        // 105 - Chafblum
+        // 107 - Jimmy
+        // 111 - Larrifin
+        // 112 - Nahuatla Guard
+        // 113 - Nakai (Not done)
         // 118 - Generic Barako NPC
+        // 119 - Generic Barrab NPC
+        // 120 - Generic Disquiqui NPC
+        // 121 - Generic Jukari NPC
         // 122 - Generic Kurak NPC
+        // 123 - Generic Nahuatla NPC
         // 124 - Generic Pindiro NPC
         // 125 - Generic Yolaru NPC
         private void cbConv_SelectedIndexChanged(object sender, EventArgs e)
@@ -261,6 +282,7 @@ namespace SavageEmpireSNESTransTool
 
                 // 0x1007d8 - Can't drop here
                 // 0x1008b4 - Use outdoors at night
+                // 0x12ee7 - Sulfur must be at this address
                 // 0x13419 - Vendor: It sells for !
                 // 0x100ee2 - Vendor alphabet
                 // 0x1342a - Vendor: It sells for !
@@ -276,6 +298,7 @@ namespace SavageEmpireSNESTransTool
                 // 0x13be8 - ring - Ring must be at this address.
                 // 0x101936 - Choose your path
                 // 0x14bcd - Jimmy must be at this address
+                // 0x14d99 - Tribe must be at this address
                 try
                 {
                     string offset = tbOffset.Text;
