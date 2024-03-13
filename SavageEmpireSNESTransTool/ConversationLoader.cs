@@ -52,6 +52,7 @@ namespace SavageEmpireSNESTransTool
             m_knownBits.Add(0x0B, "YOLARU_SOMETHING");
             m_knownBits.Add(0x11, "BARRAB_SOMETHING");
             m_knownBits.Add(0x15, "DISQUIQUI_SOMETHING");
+            m_knownBits.Add(0x2F, "HAS_JIMMYS_NOTEBOOK_1");
             m_knownBits.Add(0x3F, "ALREADY_HAVE_PLACHTA");
             m_knownBits.Add(0x40, "INVENTORY_FULL");
             m_knownBits.Add(0x5B, "KNOWS_TRIOLO");
@@ -69,20 +70,27 @@ namespace SavageEmpireSNESTransTool
             m_knownBits.Add(0x93, "CHAFBLUM_DRANK_PACHTA");
             m_knownBits.Add(0x94, "KNOWS_DISQUIQUI_NEED");
             m_knownBits.Add(0x95, "DISQUIQUI_JOINED_UNION");
-            m_knownBits.Add(0x9A, "KNOWS_DOKREY");
+            m_knownBits.Add(0x9A, "KNOWS_DOKRAY");
             m_knownBits.Add(0x9E, "KNOWS_FRITZ");
             m_knownBits.Add(0x9F, "FRITZ_TALKED_ABOUT_BRAIN");
             m_knownBits.Add(0xA0, "FRITZ_ALREADY_TOLD_LONG_STORY");
             m_knownBits.Add(0xA1, "TALKED_WITH_GRUGORR");
             m_knownBits.Add(0xA3, "HAAKUR_SHIELD_RETURNED");
             m_knownBits.Add(0xA4, "KNOWS_GUOBLUM");
-            m_knownBits.Add(0xA7, "HALISA_SAVED");
+            m_knownBits.Add(0xA7, "KNOWS_HALISA");
+            m_knownBits.Add(0xA8, "GORILLA_DEAD");
             m_knownBits.Add(0xAA, "KNOWS_INARA");
             m_knownBits.Add(0xAB, "INARA_UNUSED?");
             m_knownBits.Add(0xAC, "INARA_EXPLAINED_ALREADY_WHY_PINDIRO_JOINS_UNION");
             m_knownBits.Add(0xAD, "INTANYA_CONVERSATION_RESET");
+            m_knownBits.Add(0xAF, "HAS_JIMMYS_NOTEBOOK_2");
             m_knownBits.Add(0xB1, "KNOWS_ABOUT_TOPURU");
+            m_knownBits.Add(0xB2, "HAS_JIMMYS_CAMERA");
+            m_knownBits.Add(0xB3, "KNOWS_SANE_SPECTOR");
+            m_knownBits.Add(0xB4, "SPECTOR_TALKED_PROBLEM");
             m_knownBits.Add(0xB7, "RETURNED_SACRED_HIDE");
+            m_knownBits.Add(0xB9, "KOTL_DOOR_OPEN");
+            m_knownBits.Add(0xBA, "KNOWS_KSSSINDRA");
             m_knownBits.Add(0xBB, "KNOWS_KUNAWO");
             m_knownBits.Add(0xBC, "ASKED_KUNAWO_ABOUT_PINDIRO");
             m_knownBits.Add(0xBF, "CAN_GET_PLACHTA");
@@ -90,14 +98,23 @@ namespace SavageEmpireSNESTransTool
             m_knownBits.Add(0xC2, "KNOWS_MOCTAPOTL");
             m_knownBits.Add(0xC4, "MOCTAPOTL_RESTORED_2???");
             m_knownBits.Add(0xC5, "KNOWS_MOSAGAN");
+            m_knownBits.Add(0xC6, "KNOWS_NAKAI"); // This is wrong, find out why.  It appears to be if you've talked with him, but was set elsewhere as well, though not sure where
             m_knownBits.Add(0xC7, "KNOWS_NAWL");
             m_knownBits.Add(0xCA, "KNOWS_PAXAPTAMAC");
             m_knownBits.Add(0xCC, "KNOWS_RAFKIN");
+            m_knownBits.Add(0xCF, "KNOWS_SHAMURU");
+            m_knownBits.Add(0xD0, "KNOWS_SPECTOR");
             m_knownBits.Add(0xD1, "KNOWS_SYSSKARR");
             m_knownBits.Add(0xD2, "SYSSKARR_TOLD_HOWTO_UNITE");
             m_knownBits.Add(0xD3, "KILLED_THUNDERER");
+            m_knownBits.Add(0xD4, "KNOWS_TIAPATLA");
+            m_knownBits.Add(0xD9, "TOPURU_MENTIONED_BLUE_STONE");
             m_knownBits.Add(0xDB, "KNOWS_TRIOLO");
             m_knownBits.Add(0xDC, "KNOWS_TRISTIA");
+            m_knownBits.Add(0xE6, "DARDEN_KILLED");
+            m_knownBits.Add(0xE7, "WAMAP_TELLS_ABOUT_FABOZZ_NOT_SAVED");
+            m_knownBits.Add(0xE8, "FABOZZ_RETURNED");
+            m_knownBits.Add(0xEB, "YUNAPOTLI_HAS_BRAIN");
         }
 
         void LoadOptions()
@@ -305,8 +322,18 @@ namespace SavageEmpireSNESTransTool
 
         private string Process0x89(ref uint curAddress)
         {
-            string strRet = "???_END";
+            string strRet = "RETURN";
             curAddress++;
+
+            return strRet;
+        }
+
+        // Local Jump
+        private string Process0x8A(ref uint curAddress)
+        {
+            string strRet = "GOTO_8A ";
+            curAddress++;
+            strRet += GetLocalAddress(ref curAddress);
 
             return strRet;
         }
@@ -739,10 +766,13 @@ namespace SavageEmpireSNESTransTool
                     case 0x013:
                         m_CurrentConversation += Process0x13(ref curAddress);
                         break;
-                    case 0x88: // Blank/Return??
+                    case 0x8A: // Jumps further down in the script, and stores the current address to return to. Should return here via 0x89
+                        m_CurrentConversation += Process0x8A(ref curAddress);
+                        break;
+                    case 0x88: // Blank/Return to where the conversation was called, close conversation
                         m_CurrentConversation += Process0x88(ref curAddress);
                         break;
-                    case 0x89: // Return??
+                    case 0x89: // Return to what called this address, keep conversation open
                         m_CurrentConversation += Process0x89(ref curAddress);
                         break;
                     case 0x8C: // GOTO

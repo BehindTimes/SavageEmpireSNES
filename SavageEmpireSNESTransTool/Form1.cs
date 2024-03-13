@@ -107,13 +107,20 @@ namespace SavageEmpireSNESTransTool
             }
         }
 
+        // 01 - Jimmy's Notebook
+        // 02 - The End
+        // 03 - Made the drum
         // 04 - Aloron
         // 05 - Apaton
         // 06 - Balakai
+        // 07 - Denys
         // 08 - Dokray
+        // 09 - Fritz
         // 10 - Grugorr
         // 11 - Guoblum
         // 12 - Halawa
+        // 13 - Halisa
+        // 14 - Huitlapacti
         // 15 - Inara
         // 16 - Intanya
         // 17 - Jumu
@@ -122,25 +129,42 @@ namespace SavageEmpireSNESTransTool
         // 20 - Moctapotl
         // 21 - Mosagann
         // 22 - Nawl
+        // 23 - Oaxtepac
         // 24 - Paxaptamac
         // 25 - Rafkin
         // 26 - Sahree
+        // 27 - Shamaroo
         // 28 - Sysskarr
+        // 29 - Tlapatla
+        // 30 - Topuru
         // 31 - Triolo
         // 32 - Tristia
         // 33 - Tuomaxx
+        // 34 - Ugyuk
+        // 35 - Wamap
+        // 36 - Zipactriotl
         // 37 - 60 - Generic NPCs
         // 61 - Generic Haakur
         // 62-69 - Generic NPCs
-        // 70-77 - Generic Kurak NPC 
+        // 70-77 - Generic Kurak NPCs
         // 78-93 - Generic NPCs
         // 94 - Generic Sakkhra
+        // 95 - Generic Urali
         // 96-103 - Generic NPCs
+        // 104 - Aiela
         // 105 - Chafblum
+        // 106 - Fabozz
         // 107 - Jimmy
+        // 108 - Spector (Sane)
+        // 109 - Katalkotl
+        // 110 - Ksssindra
         // 111 - Larrifin
         // 112 - Nahuatla Guard
-        // 113 - Nakai (Not done)
+        // 113 - Nakai
+        // 114 - Spector
+        // 115 - Urali Guard
+        // 116 - Wisp
+        // 117 - Yunapotli
         // 118 - Generic Barako NPC
         // 119 - Generic Barrab NPC
         // 120 - Generic Disquiqui NPC
@@ -295,7 +319,8 @@ namespace SavageEmpireSNESTransTool
                 // 0x136f8 - Grenade must be at this address.
                 // 0x138ca - torch
                 // 0x101402 - たいまつ
-                // 0x13be8 - ring - Ring must be at this address.
+                // 0x13be8 - ring must be at this address.
+                // 0x15757 - Destruction must be at this address (I changed it to destroy due to space)
                 // 0x101936 - Choose your path
                 // 0x14bcd - Jimmy must be at this address
                 // 0x14d99 - Tribe must be at this address
