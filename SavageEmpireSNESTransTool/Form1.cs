@@ -123,7 +123,7 @@ namespace SavageEmpireSNESTransTool
         // 14 - Huitlapacti
         // 15 - Inara
         // 16 - Intanya
-        // 17 - Jumu
+        // 17 - Jumu 
         // 18 - Kunawo
         // 19 - Lerei
         // 20 - Moctapotl
@@ -143,14 +143,17 @@ namespace SavageEmpireSNESTransTool
         // 34 - Ugyuk
         // 35 - Wamap
         // 36 - Zipactriotl
-        // 37 - 60 - Generic NPCs
+        // 37 - 44 Generic Barako
+        // 45 - 52 Generic Barrab NPCs
+        // 53 - 60 Generic Disquiqui NPCs
         // 61 - Generic Haakur
-        // 62-69 - Generic NPCs
+        // 62-69 - Generic Jukari NPCs
         // 70-77 - Generic Kurak NPCs
-        // 78-93 - Generic NPCs
+        // 78-85 - Generic Nahuatla NPCs
+        // 86-93 - Generic Pindiro NPCs
         // 94 - Generic Sakkhra
         // 95 - Generic Urali
-        // 96-103 - Generic NPCs
+        // 96-103 - Generic Yolaru NPCs
         // 104 - Aiela
         // 105 - Chafblum
         // 106 - Fabozz
